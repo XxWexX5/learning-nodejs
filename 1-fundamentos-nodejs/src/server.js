@@ -18,18 +18,18 @@ const server = http.createServer((req, res) => {
       email: 'john.doe@example.com',
     });
 
-    return res.end('Criação de usuário');
+    return res.writeHead(201).end(JSON.stringify({ message: 'User created' }));
   }
 
   if (url === '/users' && method === 'PUT') {
-    return res.end('Atualização de usuário');
+    return res.end(JSON.stringify({ message: 'User updated' }));
   }
 
   if (url === '/users' && method === 'DELETE') {
-    return res.end('Remoção de usuário');
+    return res.end(JSON.stringify({ message: 'User deleted' }));
   }
 
-  res.end('Hello World!');
+  res.writeHead(404).end(JSON.stringify({ message: 'Not found' }));
 });
 
 server.listen(3333, () => {
