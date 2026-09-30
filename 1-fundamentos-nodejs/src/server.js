@@ -1,29 +1,16 @@
 import http from 'node:http';
+import { json } from './middlewares/json.js';
 
 const users = [];
 
 const server = http.createServer(async (req, res) => {
-  res.setHeader('Content-type', 'application/json');
-
   const { url, method } = req;
-
-  const buffers = [];
-
-  for await (const chunk of req) {
-    buffers.push(chunk);
-  }
-
-  try {
-    const fullStreamContent = JSON.parse(Buffer.concat(buffers).toString());
-
-    req.body = fullStreamContent;
-  } catch (error) {
-    req.body = null;
-  }
 
   if (url === '/users' && method === 'GET') {
     return res.end(JSON.stringify(users));
   }
+
+  await json(req, res);
 
   if (url === '/users' && method === 'POST') {
     const { name, email } = req.body;
